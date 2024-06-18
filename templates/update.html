@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    
+</head>
+<body style="color:rgb(0, 0, 0); background-color: lightseagreen;">
+    {% block content %}
+    <div class="container-fluid"> 
+        <div class="col-md-offset-1 col-md-4">  <!-- Grid system is basically used to divide the desktop into columns which is easier to showcase the contents in it-->
+            <form action="" method="POST">
+                {% csrf_token %}
+            <h3 class="page-header text-primary text-center" style="color:black ;"> Registration </h3> <!-- classname is page-header, text-primary is for changing the color of the text, text-center is for aligning the text to center-->
+            <div class="form-group"> <!--form-group is the form name -->
+                <label> Name </label>
+                <input type="text" class="form-control" value="{{data.Name}}" name="name">
+            </div>
+
+            <div class="form-group">
+                <label> Age </label>
+                <input type="text" class="form-control" value="{{data.Age}}"name="age">
+            </div>
+
+            <div class="form-group">
+                <label> Address </label>
+                <input type="text" class="form-control" value="{{data.Address}}"name="address">
+            </div>
+
+            <div class="form-group">
+                <label> Contact </label>
+                <input type="text" class="form-control" value="{{data.Contact}}"name="contact">
+            </div>
+
+            <div class="form-group">
+                <label> Email </label>
+                <input type="email" class="form-control" value="{{data.Email}}"name="email">
+            </div>
+
+            <div class="form-group pull-right"> <!--pull right is used to pull the button align to right-->
+                <input type="submit" value="Update" class="btn btn-primary">
+            </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

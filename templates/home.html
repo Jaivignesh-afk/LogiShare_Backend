@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    
+</head>
+<body style="color:rgb(0, 0, 0); background-color: lightseagreen;">
+    {% block content %}
+    <div class="container-fluid"> 
+        <div class="col-md-offset-1 col-md-4">  <!-- Grid system is basically used to divide the desktop into columns which is easier to showcase the contents in it-->
+            <form action="" method="POST">
+                {% csrf_token %}
+            <h3 class="page-header text-primary text-center" style="color:black ;"> Registration </h3> <!-- classname is page-header, text-primary is for changing the color of the text, text-center is for aligning the text to center-->
+            <div class="form-group">
+                <label> TYPE </label>
+                <input type="text" class="form-control" name="type">
+            </div>
+
+            <div class="form-group">
+                <label> LENGTH </label>
+                <input type="number" class="form-control" name="length">
+            </div>
+
+            <div class="form-group">
+                <label> WIDTH </label>
+                <input type="number" class="form-control" name="width">
+            </div>
+
+            <div class="form-group">
+                <label> HEIGHT </label>
+                <input type="number" class="form-control" name="height">
+            </div>
+
+           
+            <div class="form-group">
+                <label> QUANTITY </label>
+                <input type="number" class="form-control" name="quantity">
+            </div>
+            <div class="form-group">
+                <label> PICKUP LOCATION </label>
+                <input type="text" class="form-control" name="pickup">
+            </div>
+
+            <div class="form-group">
+                <label> DROP LOCATION </label>
+                <input type="text" class="form-control" name="drop">
+            </div>
+
+            <div class="form-group pull-right"> <!--pull right is used to pull the button align to right-->
+                <input type="submit" value="Register" class="btn btn-primary">
+                <input type="reset" value="Clear" class="btn btn-danger">
+            </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            {% if datas %}
+            <h3 class="page-header text-primary text-center" style="color:black ;">View Details</h3>
+            <table class=" table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Quantity</th>
+                        <th>Pickup</th>
+                        <th>Drop</th>
+                    </tr>
+                </thead>
+                
+                    {% for data in datas %} <!-- Using the iterating variable data my printing the information fom the table -->
+                    <tbody>
+                        <tr>
+                            <td>{{ data.Type }}</td>
+                            <td>{{ data.Length }}</td>
+                            <td>{{ data.Width}}</td>
+                            <td>{{ data.Height}}</td>
+                            <td>{{ data.Quantity}}</td>
+                            <td>{{ data.Pickup}}</td>
+                            <td>{{ data.Drop}}</td>
+                            {% comment %} <td><a class="btn btn-success" href="updateData/{{data.id}}">Update</a></td> {% endcomment %}
+                            
+                        </tr>
+                    </tbody>
+                    
+                    {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    {% endblock %}
+</body>
+</html>
