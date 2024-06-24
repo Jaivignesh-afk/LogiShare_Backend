@@ -160,7 +160,13 @@ def display_quotes(request, id):
         print(data)
         return JsonResponse({'data': data}, status=200)
 
-
+@csrf_exempt
+def deleteorder(request, id, user_id):
+    if request.method == "DELETE":
+        shipment = Shipment.objects.filter(id = id).filter(customer = Customer.objects.get(id = user_id))
+        print(shipment.values())
+        shipment.delete()
+        return JsonResponse({'message': 'Shipment deleted successfully'}, status=204)
 @csrf_exempt
 def filterShipment(request):
     if request.method == "POST":

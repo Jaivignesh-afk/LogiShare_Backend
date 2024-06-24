@@ -148,8 +148,8 @@ class Transporter(models.Model):
 class Quotes(models.Model):
     # unique_id = models.UUIDField(max_length=20,auto_created=True)
     quote = models.IntegerField(blank=False, null=False)
-    transporter = models.ForeignKey(Transporter, on_delete=models.PROTECT,related_name='transporter_who_gave_quote', blank=True, null=True)
-    shipment = models.ForeignKey('Shipment',on_delete=models.PROTECT, related_name='shipment_for_which_quote_is_given', blank=True, null=True)
+    transporter = models.ForeignKey(Transporter, on_delete=models.DO_NOTHING,related_name='transporter_who_gave_quote', blank=True, null=True)
+    shipment = models.ForeignKey('Shipment',on_delete=models.CASCADE, related_name='shipment_for_which_quote_is_given', blank=True, null=True)
 
     class Meta:
         unique_together = ('transporter', 'shipment')

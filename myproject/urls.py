@@ -38,6 +38,7 @@ urlpatterns = [
     path('t/history/<int:id>/<str:status>', views.display_history_trans),
     path('translisting', views.translisting),
     path('translisting/confirmed',views.confirm_shipment),
+    path('deleteorder/<int:id>/<int:user_id>',views.deleteorder),
 ]
 
 if settings.DEBUG:
