@@ -76,7 +76,8 @@ def sendListing(request, id):
                             'deliveryLocation':Shipment.objects.get(id=id).Drop,
                             'shipmentWeight':str(Shipment.objects.get(id=id).Weight),
                             'itemName':Shipment.objects.get(id=id).Type,
-                            'photo': Shipment.objects.get(id=id).photo.name}, status=200,)
+                            'photo': Shipment.objects.get(id=id).photo.name,
+                            'category':  Shipment.objects.get(id=id).category }, status=200,)
 
 @csrf_exempt    
 def store_quote(request):
@@ -173,89 +174,34 @@ def filterShipment(request):
         data = json.loads(request.body)
         pickup = data.get('pickup')
         delivery = data.get('delivery')
-        print(pickup, delivery)
-        shipments = Shipment.objects.filter(Pickup = pickup).filter(Drop = delivery)
-        data = list(shipments.values())
-        return JsonResponse({'data': data}, status=200)
-
-@csrf_exempt
-def addData(request): 
-    if request.method == 'POST':
-        # data = json.loads(request.body)
-        type=request.POST.get('Type')
-        length=request.POST.get('Length')
-        width=request.POST.get('Width')
-        weight=request.POST.get('Weight')
-        height=request.POST.get('Height')
-        quantity=request.POST.get('Quantity')
-        pickup=request.POST.get('Pickup')
-        drop=request.POST.get('Drop')
-        customer_id = request.POST.get('customer_id')
-        p_pincode = request.POST.get('p_pincode')
-        d_pincode = request.POST.get('d_pincode')
-        obj=Shipment()
-        obj.Type=type
-        obj.Length=length
-        obj.Width=width
-        obj.Height=height
-        obj.Quantity=quantity
-        obj.Pickup = pickup
-        obj.Drop = drop
-        obj.Weight = weight
-        obj.customer = Customer.objects.get(id = int(customer_id))
-        obj.p_pincode = p_pincode
-        obj.d_pincode = d_pincode
-        obj.save()
-        print(obj.customer.email)
-        return JsonResponse({"id":str(obj.pk), "type":obj.Type,"pickup":obj.Pickup,"drop":obj.Drop}, status=201)
-    elif request.method == 'PUT':
-        data = json.loads(request.body.decode('utf-8'))
-        id = data.get('id')
-        title = data.get('title')
-        latest_pickup_date = data.get('latest_pickup_date')
-        earliest_pickup_date = data.get('earliest_pickup_date')
-        earliest_delivery_date = data.get('earliest_delivery_date')
-        latest_delivery_date = data.get('latest_delivery_date')
-        image = request.FILES.get('photo')
+        weight = data.get('weight')
+        category = data.get('category')
+        shipments = Shipment.objects.filter(Pickup = pickup).filter(Drop = delivery).filter(Weight = weight).filter(category = category)
+        
+        
+        return JsonResponse({'data': list(shipments.values())}, status=200)
 
 
-        try:
-            shipment = Shipment.objects.get(id=id)
-            shipment.title = title
-            shipment.latest_pickup_date = latest_pickup_date
-            shipment.earliest_pickup_date = earliest_pickup_date
-            shipment.earliest_delivery_date = earliest_delivery_date
-            shipment.latest_delivery_date = latest_delivery_date
-            if image:
-                shipment.photo = image
-            shipment.save()
-            return JsonResponse({'message': 'Shipment updated successfully'}, status=206)
-        except Shipment.DoesNotExist:
-            return JsonResponse({'error': 'Shipment matching query does not exist'}, status=404)
-
-    # return JsonResponse({'error': 'Invalid request method'}, status=400)
-    else:
-        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
-# def updateData(request, id):
-#     mydata=Shipment.objects.get(id=id)
-
-#     return render(request, 'update.html', {'data':mydata})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AddShipmentData(APIView):
     def post(self, request):
         serializer = ShipmentSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response('Shipment not created', status=status.HTTP_400_BAD_REQUEST)
     
     def put(self,request,id):
         shipment_data = Shipment.objects.get(pk=id)
         serializer = ShipmentSerializer(shipment_data,data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
-            return Response('Shipment updated successfully', status=status.HTTP_200_OK)
+            print(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response('Shipment not updated', status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
@@ -331,4 +277,65 @@ def shipper_temp(request):
         return JsonResponse({'message': 'User updated successfully','owner':owner.company_name},status=206)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
-    
+    # @csrf_exempt
+# def addData(request): 
+#     if request.method == 'POST':
+#         # data = json.loads(request.body)
+#         type=request.POST.get('Type')
+#         length=request.POST.get('Length')
+#         width=request.POST.get('Width')
+#         weight=request.POST.get('Weight')
+#         height=request.POST.get('Height')
+#         quantity=request.POST.get('Quantity')
+#         pickup=request.POST.get('Pickup')
+#         drop=request.POST.get('Drop')
+#         customer_id = request.POST.get('customer_id')
+#         p_pincode = request.POST.get('p_pincode')
+#         d_pincode = request.POST.get('d_pincode')
+#         obj=Shipment()
+#         obj.Type=type
+#         obj.Length=length
+#         obj.Width=width
+#         obj.Height=height
+#         obj.Quantity=quantity
+#         obj.Pickup = pickup
+#         obj.Drop = drop
+#         obj.Weight = weight
+#         obj.customer = Customer.objects.get(id = int(customer_id))
+#         obj.p_pincode = p_pincode
+#         obj.d_pincode = d_pincode
+#         obj.save()
+#         print(obj.customer.email)
+#         return JsonResponse({"id":str(obj.pk), "type":obj.Type,"pickup":obj.Pickup,"drop":obj.Drop}, status=201)
+#     elif request.method == 'PUT':
+#         data = json.loads(request.body.decode('utf-8'))
+#         id = data.get('id')
+#         title = data.get('title')
+#         latest_pickup_date = data.get('latest_pickup_date')
+#         earliest_pickup_date = data.get('earliest_pickup_date')
+#         earliest_delivery_date = data.get('earliest_delivery_date')
+#         latest_delivery_date = data.get('latest_delivery_date')
+#         image = request.FILES.get('photo')
+
+
+#         try:
+#             shipment = Shipment.objects.get(id=id)
+#             shipment.title = title
+#             shipment.latest_pickup_date = latest_pickup_date
+#             shipment.earliest_pickup_date = earliest_pickup_date
+#             shipment.earliest_delivery_date = earliest_delivery_date
+#             shipment.latest_delivery_date = latest_delivery_date
+#             if image:
+#                 shipment.photo = image
+#             shipment.save()
+#             return JsonResponse({'message': 'Shipment updated successfully'}, status=206)
+#         except Shipment.DoesNotExist:
+#             return JsonResponse({'error': 'Shipment matching query does not exist'}, status=404)
+
+#     # return JsonResponse({'error': 'Invalid request method'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+# # def updateData(request, id):
+# #     mydata=Shipment.objects.get(id=id)
+
+# #     return render(request, 'update.html', {'data':mydata})
