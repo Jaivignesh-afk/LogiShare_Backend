@@ -205,24 +205,24 @@ class AddShipmentData(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response('Shipment not updated', status=status.HTTP_400_BAD_REQUEST)
 
-@csrf_exempt
-def login(request):
+# @csrf_exempt
+# def login(request):
     
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        username = data.get('username')
-        password = data.get('password')
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         username = data.get('username')
+#         password = data.get('password')
         
-        #user = authenticate(username=username, password=password)
-        print(username, password)
-        return JsonResponse({'message': 'Login successful'}, status=200)
-        """
-        else:
-            # Authentication failed
-            return JsonResponse({'error': 'Invalid username or password'}, status=400)
-        """
-    else:
-        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+#         #user = authenticate(username=username, password=password)
+#         print(username, password)
+#         return JsonResponse({'message': 'Login successful'}, status=200)
+#         """
+#         else:
+#             # Authentication failed
+#             return JsonResponse({'error': 'Invalid username or password'}, status=400)
+#         """
+#     else:
+#         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
 
 
 

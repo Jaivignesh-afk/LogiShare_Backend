@@ -176,5 +176,5 @@ class Shipment(models.Model):
     p_pincode =models.IntegerField(default=600012)
     d_pincode =models.IntegerField(default=600012)
     is_accepted = models.BooleanField(default=False)
-    is_delivered = models.BooleanField(default=True)
+    is_delivered = models.BooleanField(default=False)
     category = models.CharField(max_length=100, default='')
