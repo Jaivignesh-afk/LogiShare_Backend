@@ -176,6 +176,7 @@ def filterShipment(request):
         delivery = data.get('delivery')
         weight = data.get('weight')
         category = data.get('category')
+        print(data)
         shipments = Shipment.objects.filter(Pickup = pickup).filter(Drop = delivery).filter(Weight = weight).filter(category = category)
         
         
@@ -190,7 +191,7 @@ class AddShipmentData(APIView):
         
         if serializer.is_valid():
             serializer.save()
-            
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response('Shipment not created', status=status.HTTP_400_BAD_REQUEST)
     
